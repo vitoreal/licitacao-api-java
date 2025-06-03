@@ -2,28 +2,36 @@ package com.gestao.licitacao.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Entity
+@Schema(description = "Entidade que representa uma licitação do ComprasNet")
 @Table(name = "licitacao")
 public class Licitacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "ID da licitação", example = "1")
     private Long id;
     
     @Column(name = "codigo_uasg")
+    @Schema(description = "Código da UASG", example = "130002")
     private String codigoUasg;
     
     @Column(name = "numero_pregao")
+    @Schema(description = "Número do pregão", example = "5/2025")
     private String numeroPregao;
     
     @Column(name = "objeto")
+    @Schema(description = "Objeto da licitação", example = "Aquisição de materiais de escritório")
     private String objeto;
     
     @Column(name = "data_proposta")
+    @Schema(description = "Data de entrega da proposta", example = "03/06/2025")
     private LocalDateTime dataProposta;
     
     @Column(name = "visualizada")
+    @Schema(description = "Indica se a licitação já foi visualizada", example = "true")
     private boolean visualizada;
 
     public Licitacao() {

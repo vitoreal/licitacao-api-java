@@ -12,6 +12,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -20,10 +22,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 @Service
 public class ImportarLicitacaoService {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(ImportarLicitacaoService.class);
     private final LicitacaoRepository repository;
 
     public ImportarLicitacaoService(LicitacaoRepository repository) {
@@ -55,7 +57,7 @@ public class ImportarLicitacaoService {
                 }
 
             } catch (Exception e) {
-                throw new RuntimeException("Erro ao processar bloco: " + e.getMessage(), e);
+            	logger.warn("Erro ao processar licitação: {}", e.getMessage());
             }
         }
     }
