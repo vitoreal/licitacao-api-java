@@ -13,4 +13,6 @@ public interface LicitacaoRepository extends JpaRepository<Licitacao, Long> {
     Page<Licitacao> findByCodigoUasgContainingAndNumeroPregaoContaining(String codigoUasg, String numeroPregao, Pageable pageable);
 
     long countByCodigoUasg(String codigoUasg);
+    
+    boolean existsByCodigoUasgAndNumeroPregao(String codigoUasg, String numeroPregao);
 }

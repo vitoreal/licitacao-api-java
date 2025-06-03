@@ -3,18 +3,13 @@ package com.gestao.licitacao.service;
 import com.gestao.licitacao.dto.LicitacaoDTO;
 import com.gestao.licitacao.model.Licitacao;
 import com.gestao.licitacao.repository.LicitacaoRepository;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.*;
 
@@ -86,54 +81,13 @@ public class LicitacaoService {
         return response;
         
     }
-
-    public long verificarExisteLicitacao(String codigoUasg) {
-        return repository.countByCodigoUasg(codigoUasg);
-    }
     
-    public List<Licitacao> capturarLicitacoes() throws IOException {
-        String url = "http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacaoDia.asp";
-        Document doc = Jsoup.connect(url).get();
-
-        List<Licitacao> licitacoes = new ArrayList<>();
-        Elements rows = doc.select("table:nth-of-type(2) tr");
-        
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        
-        for (Element row : rows) {
-            Elements cols = row.select("td");
-            if (cols.size() >= 5) {
-                Licitacao licitacao = new Licitacao();
-                licitacao.setObjeto(cols.get(1).text());
-                
-                String codigoUasg = cols.get(2).text();
-                
-                licitacao.setCodigoUasg(codigoUasg);
-                licitacao.setNumeroPregao(cols.get(3).text());
-                
-                String dataTexto = cols.get(4).text().trim();
-                
-                try {
-                    LocalDateTime data = LocalDateTime.parse(dataTexto, formatter);
-                    licitacao.setDataProposta(data);
-                } catch (Exception e) {
-                    System.err.println("Erro ao converter data: " + dataTexto);
-                    licitacao.setDataProposta(null);
-                }
-                
-                long total = repository.countByCodigoUasg(codigoUasg);
-                
-                if(total == 0) {
-                	licitacoes.add(repository.save(licitacao));
-                }
-                
-            }
-        }
-
-        return licitacoes;
+    public Optional<Licitacao> buscarPorId(Long id) {
+        return repository.findById(id);
     }
 
-    public List<Licitacao> listarTodos() {
-        return repository.findAll();
+    public Licitacao salvar(Licitacao licitacao) {
+        return repository.save(licitacao);
     }
+
 }
