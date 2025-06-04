@@ -63,7 +63,7 @@ public class ImportarLicitacaoService {
     }
 
     
-    private String obterPaginaLicitacoes() throws IOException, ParseException {
+    public String obterPaginaLicitacoes() throws IOException, ParseException {
         HttpClient client = HttpClients.createDefault();
         HttpGet request = new HttpGet("http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacaoDia.asp");
 
@@ -79,7 +79,7 @@ public class ImportarLicitacaoService {
         System.out.println(html);
         Pattern uasgPattern = Pattern.compile("Código da UASG:\\s*(\\d+)");
         Pattern pregaoPattern = Pattern.compile("Pregão Eletrônico Nº\\s*([0-9/]+)");
-        Pattern objetoPattern = Pattern.compile("Objeto:\\s*Pregão Eletrônico\\s*-\\s*(.+?)(\\r?\\n|$)");
+        Pattern objetoPattern = Pattern.compile("Objeto:\\s*Pregão Eletrônico\\s*-\\s*(.+?)\\s+Entrega da Proposta:");
         Pattern entregaPattern = Pattern.compile("Entrega da Proposta:\\s*([0-9/]+)\\s+às\\s+([0-9]{2}:[0-9]{2})Hs");
 
         Matcher mUasg = uasgPattern.matcher(html);
